@@ -1,0 +1,26 @@
+:root {
+    --dark-color: #090909;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Outfit", sans-serif;
+}
+
+body {
+    background-color: var(--dark-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #fff;
+}
+
+p {
+    color: #fff;
+}

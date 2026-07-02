@@ -31,9 +31,13 @@ func ApiRoutes(router *gin.Engine) {
 		apiRouter.POST("/create-category", categoryController.Create)
 		apiRouter.GET("/get-categories", categoryController.GetAll)
 		apiRouter.GET("/get-category/:id", categoryController.GetById)
+		apiRouter.DELETE("/delete-category/:id", categoryController.DeleteById)
 
 		projectController := controllers.NewProjectController(dbFolder, "projects")
 		apiRouter.POST("/create-project", projectController.Create)
+		apiRouter.GET("/get-projects", projectController.GetAll)
+		apiRouter.GET("/get-project/:id", projectController.GetByID)
+		apiRouter.DELETE("/delete-project/:id", projectController.DeleteByID)
 
 	}
 }

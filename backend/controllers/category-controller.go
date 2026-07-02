@@ -83,7 +83,7 @@ func (c *CategoryController) SeedCategories(categories []models.Category) {
 
 	// add nanoid please
 	for i := range categories {
-		categories[i].Id, _ = gonanoid.New(8)
+		categories[i].ID, _ = gonanoid.New(8)
 	}
 
 	if err := c._writeCategories(categories); err != nil {
@@ -98,7 +98,7 @@ func (c *CategoryController) Create(ctx *gin.Context) {
 		return
 	}
 
-	category.Id, _ = gonanoid.New(8)
+	category.ID, _ = gonanoid.New(8)
 
 	categories, err := c._readCategories()
 	if err != nil {
@@ -125,7 +125,7 @@ func (c *CategoryController) GetById(ctx *gin.Context) {
 	}
 
 	for _, category := range categories {
-		if category.Id == categoryId {
+		if category.ID == categoryId {
 			ctx.JSON(200, category)
 			return
 		}
@@ -142,4 +142,34 @@ func (c *CategoryController) GetAll(ctx *gin.Context) {
 	}
 
 	ctx.JSON(200, categories)
+}
+
+func (c *CategoryController) DeleteById(ctx *gin.Context) {
+	categories, err := c._readCategories()
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	categoryId := ctx.Param("id")
+	isCategoryFound := false
+	for i, category := range categories {
+		if category.ID == categoryId {
+			categories = append(categories[:i], categories[i+1:]...)
+			isCategoryFound = true
+			break
+		}
+	}
+
+	if err := c._writeCategories(categories); err != nil {
+		ctx.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !isCategoryFound {
+		ctx.JSON(404, gin.H{"error": "category not found"})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"message": "category deleted"})
 }
